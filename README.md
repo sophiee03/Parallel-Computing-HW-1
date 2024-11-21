@@ -1,1 +1,2 @@
 # IntroPARCO-2024-H1
+In this repository we will analyze the behavior of a code execution with different parallelization techniques, in particular we will consider these performance metrics: speedup and efficiency. The techniques that we will discuss are: serial execution, implicit parallelism execution (with optimization flags and pragmas) and explicit parallelism execution (using OpenMP directives).
