@@ -34,8 +34,8 @@ qsub -I -q name_queue -l select=1:ncpus=60:ompthreads=60:mem=1mb
 ```
 After we start an interactive session we must enter the folder in which we want to work and create the file for our project, could be done with this command: `touch homework.c`
 And then we can start writing our sequential code. It must contain.
-- control on the size of the matrix
-- control on the matrix allocation
+- control on the [size-of-the-matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/2aa730e45069cc39935a170f5c8d2ae640e9c7da/code.c#L22C1-L28C2)
+- control on the [matrix-allocation]()
 - control on the values of the matrix to check if it is symmetric (and so the transposition is not needed)
 - function to transpose the matrix
 
