@@ -90,11 +90,14 @@ To calculate the speedup:
 To calculate the efficiency:
 ```Efficiency = Speedup / N_Threads```
 You can observe the trend of these metrics in the following graphs:
-![Speedup of the matrix transposition](speedupmat.png)
-![Speedup of the symmetric check](speedupsym.png)
-![Efficiency of the matrix transposition](efficiencymat.png)
-![Efficiency of the symmetric check](efficiencysym.png)
-
+<div style="display: flex; justify-content: space-around;">
+  <img src="images/speedupmat.png" alt="Image 1" width="200" />
+  <img src="images/speedupsym.png" alt="Image 2" width="200" />
+</div>
+<div style="display: flex; justify-content: space-around;">
+  <img src="images/efficiencymat.png" alt="Image 3" width="200" />
+  <img src="images/efficiencysym.png" alt="Image 4" width="200" />
+</div>
 
 ## Results and Observations
 By studying the recorded values and the resulting speedup and efficiency calculations we can observe that:
