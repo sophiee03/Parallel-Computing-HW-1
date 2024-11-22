@@ -62,9 +62,10 @@ The first optimization that we can try to execute is the implicit parallelism on
 ***Nota*** The same optimizations could be applied to the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L77) nested loops
 
 ## Explicit Parallelism Implementation
-The first step is to include the `<omp.h>` library. The openMP method will execute with a certain number of threads the parallel regions and use even more optimizations that we will add, for example: in our case, with the nested loops, we can add a `#pragma omp for collapse(2)` that will compress the two loops in a single amount of iterations to divide among the threads. Another clause that we can add is the `schedule(auto)` that will tell the compiler that at runtime it must choose the best scheduling strategy based on the system characteristics.
+The first step is to include the `<omp.h>` library. The openMP method for the [matrix-transposition](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L160) will execute with a certain number of threads the parallel regions and use even more optimizations that we will add, for example: in our case, with the nested loops, we can add a `#pragma omp for collapse(2)` that will compress the two loops in a single amount of iterations to divide among the threads. Another clause that we can add is the `schedule(auto)` that will tell the compiler that at runtime it must choose the best scheduling strategy based on the system characteristics.
 
 ***Nota*** For the OpenMP timings we have another tool to record the wall-clock time. We store the start and end times in two variables with the `omp_get_wtime()` function included in the `omp.h` library
+***Nota*** Also in this case, the same optimizations could be applied for the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L102)
 
 ## Compilation and Execution
 Once we have our code with the three different approaches we can compile and execute it to record the timings and observe the improvements. 
