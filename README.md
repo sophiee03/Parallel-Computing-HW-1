@@ -89,7 +89,12 @@ To calculate the speedup:
 ```Speedup = SerialTime / ParallelTime```
 To calculate the efficiency:
 ```Efficiency = Speedup / N_Threads```
-You can observe the trend of these metrics in the graphs included in this repository.
+You can observe the trend of these metrics in the following graphs:
+![Speedup of the matrix transposition](speedupmat.png)
+![Speedup of the symmetric check](speedupsym.png)
+![Efficiency of the matrix transposition](efficiencymat.png)
+![Efficiency of the symmetric check](efficiencysym.png)
+
 
 ## Results and Observations
 By studying the recorded values and the resulting speedup and efficiency calculations we can observe that:
