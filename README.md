@@ -77,7 +77,7 @@ gcc -o result homework.c -fopenmp
 
 To run our compiled code we have two possibilities: 
 - the first is to use the interactive session that we have started and execute many times with different number of threads and matrix sizes. This is done with the `export OMP_NUM_THREADS=2; ./result` command
-- the second is to create a .pbs script in which we tells the compiler the number of executions that we want and with which parameters (number of threads and size of the matrix). We can do that by creating a new file with the .pbs extension and write the following code:
+- the second is to create a [.pbs-script](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/script.pbs) in which we tells the compiler the number of executions that we want and with which parameters (number of threads and size of the matrix). We can do that by creating a new file with the .pbs extension and write the following code:
 ```
 #!/bin/bash
 # name the output file 
