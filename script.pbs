@@ -1,0 +1,28 @@
+# pbs script for the 16x16 matrix with different number of threads
+#!/bin/bash
+#PBS -N 16_results
+#PBS -l select=1:ncpus=60:ompthreads=60:mem=1mb
+#PBS -l walltime=0:10:00
+#PBS -j oe
+#PBS -q short_cpuQ
+
+# Modules for C
+module load gcc91
+gcc() {
+    gcc-9.1.0 "$@"
+}
+gcc --version
+
+# Select the working directory
+cd /home/sophie.motter/exercises/homework1
+
+# Run code
+for threads in 2 4 8 16 20; do
+  echo "==========================================" >> o_16.log
+  echo "---------------thread $threads ----------" >> o_16.log
+  for i in {1..10}; do
+    export OMP_NUM_THREADS=$threads; echo 16 | ./result >> o_16.log
+    echo "-------------------------------------------" >> o_16.log
+  done
+  echo "==========================================" >> o_16.log
+done
