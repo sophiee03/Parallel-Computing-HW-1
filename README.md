@@ -39,7 +39,7 @@ And then we can start writing our sequential code. It must contain.
 - control on the values of the matrix to check if it is [symmetric](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L54C1-L74C2) (and so the transposition is not needed)
 - function to [transpose the matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L124)
 
-***Remark*** The symmetric check function would be faster if we add a break command after the first non-symmetric value is found, but for our purpose we will continue without this command that avoid the parallelization (for more explanations view the report)
+***N.B.*** The symmetric check function would be faster if we add a break command after the first non-symmetric value is found, but for our purpose we will continue without this command that avoid the parallelization (for more explanations view the report)
 After we implemented these functions we will have the base code with which we can then compare the parallel one.
 
 ## Record The Wall-Clock Time
@@ -59,13 +59,13 @@ gettimeofday(&end_tv, NULL);
 ## Implicit Parallelism Implementation
 The first optimization that we can try to execute is the implicit parallelism one: it consists in adding some optimization flags in the compilation and the most suitable pragmas above the code that we want to optimize. For example, in our case, we have two nested loops to create the [transposed-matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L141), the `#pragma simd` directive tells the compiler to force the vectorization and the `#pragma unroll(n)` will unroll the loops on a certain degree (n). These are the most suitable one for our code (the `#pragma ivdep` is not needed because we don't have dependencies). For what concern the optimization flags, after a few trials with different ones we can conclude that the most performant combination of flags is `-O2 -funroll-loops`. If we want to take the code all together in one file and make the flags affect only the implicit parallelism part we can add above the function `#pragma GCC optimize ("O2", "unroll-loops")`.
 
-***Remark*** The same optimizations could be applied to the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L77) nested loops
+***N.B.*** The same optimizations could be applied to the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L77) nested loops
 
 ## Explicit Parallelism Implementation
 The first step is to include the `<omp.h>` library. The openMP method for the [matrix-transposition](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L160) will execute with a certain number of threads the parallel regions and use even more optimizations that we will add, for example: in our case, with the nested loops, we can add a `#pragma omp for collapse(2)` that will compress the two loops in a single amount of iterations to divide among the threads. Another clause that we can add is the `schedule(auto)` that will tell the compiler that at runtime it must choose the best scheduling strategy based on the system characteristics.
 
-***Remark*** For the OpenMP timings we have another tool to record the wall-clock time. We store the start and end times in two variables with the `omp_get_wtime()` function included in the `omp.h` library
-***Remark*** Also in this case, the same optimizations could be applied for the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L102)
+***N.B.*** For the OpenMP timings we have another tool to record the wall-clock time. We store the start and end times in two variables with the `omp_get_wtime()` function included in the `omp.h` library
+***N.B.*** Also in this case, the same optimizations could be applied for the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L102)
 
 ## Compilation and Execution
 Once we have our code with the three different approaches we can compile and execute it to record the timings and observe the improvements. 
@@ -73,7 +73,7 @@ To compile the code:
 ```
 gcc -o result homework.c -fopenmp
 ```
-***Remark*** it is necessary to include in the compilation the `-fopenmp` flag to tell the compiler to use the OpenMP functionality (otherwise the explicit paralellism code will not be executed in paralell with threads)
+***N.B.*** it is necessary to include in the compilation the `-fopenmp` flag to tell the compiler to use the OpenMP functionality (otherwise the explicit paralellism code will not be executed in paralell with threads)
 
 To run our compiled code we have two possibilities: 
 - the first is to use the interactive session that we have started and execute many times with different number of threads and matrix sizes. This is done with the `export OMP_NUM_THREADS=2; ./result` command
@@ -81,7 +81,7 @@ To run our compiled code we have two possibilities:
   To submit this job we must write the following command:
 `qsub ./script.pbs` and then in our folder we will find the file in which there are written the wall-clock time requested for each number of thread specified.
 
-***Remark*** (for the windows users:) if you are executing and the system gives you an error like `command not found` or `syntax error` caused by `$'\r'` it means that the file could contain newline characters in a windows format that are not correctly interpreted on unix/linux systems. To solve this problem remove the characters `\r` with instruments like `dos2unix` or command `sed` and make sure the necessary modules are loaded.
+***N.B.*** (for the windows users:) if you are executing and the system gives you an error like `command not found` or `syntax error` caused by `$'\r'` it means that the file could contain newline characters in a windows format that are not correctly interpreted on unix/linux systems. To solve this problem remove the characters `\r` with instruments like `dos2unix` or command `sed` and make sure the necessary modules are loaded.
 
 ## Performance Analisys
 After we recorded a sufficient number of executions we can make the averages for each method and compare the results by calculating the speedup, that is how much the code is faster with respect to the serial one, and efficiency, that measure how efficiently the resources (threads) are utilized.
@@ -89,10 +89,11 @@ To calculate the speedup:
 ```Speedup = SerialTime / ParallelTime```
 To calculate the efficiency:
 ```Efficiency = Speedup / N_Threads```
+You can observe the trend of these metrics in the graphs included in this repository.
 
 ## Results and Observations
 By studying the recorded values and the resulting speedup and efficiency calculations we can observe that:
 - for small matrix sizes the performance are better with an implicit parallelism approach, this happens because the time taken for the creation and synchronization of the threads in an explicit parallelism execution will increase the wall-clock time and lead to a decrease of performance (especially with an high number of threads).
 - for big matrix sizes the most appropriate method is the explicit parallelism one that will speedup the execution proportionally to the number of threads used (bigger=faster)
 
-***Remark*** we have to take in count that for each matrix size there is a peak of performance above which the increase of execution units will decline the speedup and lead to inefficiencies. This happens for the same reason that we have notice in the small matrix sizes (time taken to create and synchronize threads will affect wall-clock time). 
+***N.B.*** we have to take in count that for each matrix size there is a peak of performance above which the increase of execution units will decline the speedup and lead to inefficiencies. This happens for the same reason that we have notice in the small matrix sizes (time taken to create and synchronize threads will affect wall-clock time). 
