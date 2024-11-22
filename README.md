@@ -34,10 +34,10 @@ qsub -I -q name_queue -l select=1:ncpus=60:ompthreads=60:mem=1mb
 ```
 After we start an interactive session we must enter the folder in which we want to work and create the file for our project, could be done with this command: `touch homework.c`
 And then we can start writing our sequential code. It must contain.
-- control on the [size-of-the-matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/2aa730e45069cc39935a170f5c8d2ae640e9c7da/code.c#L22C1-L28C2)
-- control on the [matrix-allocation](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L204)
+- control on the [size of the matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/2aa730e45069cc39935a170f5c8d2ae640e9c7da/code.c#L22C1-L28C2)
+- control on the [matrix allocation](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L204)
 - control on the values of the matrix to check if it is [symmetric](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L54C1-L74C2) (and so the transposition is not needed)
-- function to [transpose-the-matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L124)
+- function to [transpose the matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L124)
 
 ***Nota*** The symmetric check function would be faster if we add a break command after the first non-symmetric value is found, but for our purpose we will continue without this command that avoid the parallelization (for more explanations view the report)
 After we implemented these functions we will have the base code with which we can then compare the parallel one.
