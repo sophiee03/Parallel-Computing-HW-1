@@ -81,6 +81,8 @@ To run our compiled code we have two possibilities:
   To submit this job we must write the following command:
 `qsub ./script.pbs` and then in our folder we will find the file in which there are written the wall-clock time requested for each number of thread specified.
 
+***Nota*** (for the windows users:) if you are executing and the system gives you an error like `command not found` or `syntax error` caused by `$'\r'` it means that the file could contain newline characters in a windows format that are not correctly interpreted on unix/linux systems. To solve this problem remove the characters `\r` with instruments like `dos2unix` or command `sed` and make sure the necessary modules are loaded.
+
 ## Performance Analisys
 After we recorded a sufficient number of executions we can make the averages for each method and compare the results by calculating the speedup, that is how much the code is faster with respect to the serial one, and efficiency, that measure how efficiently the resources (threads) are utilized.
 To calculate the speedup:
