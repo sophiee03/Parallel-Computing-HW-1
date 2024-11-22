@@ -77,7 +77,7 @@ gcc -o result homework.c -fopenmp
 
 To run our compiled code we have two possibilities: 
 - the first is to use the interactive session that we have started and execute many times with different number of threads and matrix sizes. This is done with the `export OMP_NUM_THREADS=2; ./result` command
-- the second is to create a [.pbs-script](script.pbs) in which we tell the compiler the number of executions that we want and with which parameters (number of threads and size of the matrix).
+- the second is to create a [.pbs script](script.pbs) in which we tell the compiler the number of executions that we want and with which parameters (number of threads and size of the matrix).
   To submit this job we must write the following command:
 `qsub ./script.pbs` and then in our folder we will find the file in which there are written the wall-clock time requested for each number of thread specified.
 
@@ -91,12 +91,12 @@ To calculate the efficiency:
 ```Efficiency = Speedup / N_Threads```
 You can observe the trend of these metrics in the following graphs:
 <div style="display: flex; justify-content: space-around;">
-  <img src="images/speedupmat.png" alt="Image 1" width="200" />
-  <img src="images/speedupsym.png" alt="Image 2" width="200" />
+  <img src="images/speedupmat.png" alt="Image 1" width="500" />
+  <img src="images/speedupsym.png" alt="Image 2" width="500" />
 </div>
 <div style="display: flex; justify-content: space-around;">
-  <img src="images/efficiencymat.png" alt="Image 3" width="200" />
-  <img src="images/efficiencysym.png" alt="Image 4" width="200" />
+  <img src="images/efficiencymat.png" alt="Image 3" width="500" />
+  <img src="images/efficiencysym.png" alt="Image 4" width="500" />
 </div>
 
 ## Results and Observations
