@@ -35,9 +35,9 @@ qsub -I -q name_queue -l select=1:ncpus=60:ompthreads=60:mem=1mb
 After we start an interactive session we must enter the folder in which we want to work and create the file for our project, could be done with this command: `touch homework.c`
 And then we can start writing our sequential code. It must contain.
 - control on the [size-of-the-matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/2aa730e45069cc39935a170f5c8d2ae640e9c7da/code.c#L22C1-L28C2)
-- control on the [matrix-allocation]()
-- control on the values of the matrix to check if it is symmetric (and so the transposition is not needed)
-- function to transpose the matrix
+- control on the [matrix-allocation](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L204)
+- control on the values of the matrix to check if it is [symmetric](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L54C1-L74C2) (and so the transposition is not needed)
+- function to [transpose-the-matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L124)
 
 ***Nota*** The symmetric check function would be faster if we add a break command after the first non-symmetric value is found, but for our purpose we will continue without this command that avoid the parallelization (for more explanations view the report)
 After we implemented these functions we will have the base code with which we can then compare the parallel one.
@@ -57,9 +57,9 @@ gettimeofday(&end_tv, NULL);
 ```
 
 ## Implicit Parallelism Implementation
-The first optimization that we can try to execute is the implicit parallelism one: it consists in adding some optimization flags in the compilation and the most suitable pragmas above the code that we want to optimize. For example, in our case, we have two nested loops to create the transposed matrix, the `#pragma simd` directive tells the compiler to force the vectorization and the `#pragma unroll(n)` will unroll the loops on a certain degree (n). These are the most suitable one for our code (the `#pragma ivdep` is not needed because we don't have dependencies). For what concern the optimization flags, after a few trials with different ones we can conclude that the most performant combination of flags is `-O2 -funroll-loops`. If we want to take the code all together in one file and make the flags affect only the implicit parallelism part we can add above the function `#pragma GCC optimize ("O2", "unroll-loops")`.
+The first optimization that we can try to execute is the implicit parallelism one: it consists in adding some optimization flags in the compilation and the most suitable pragmas above the code that we want to optimize. For example, in our case, we have two nested loops to create the [transposed-matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L141), the `#pragma simd` directive tells the compiler to force the vectorization and the `#pragma unroll(n)` will unroll the loops on a certain degree (n). These are the most suitable one for our code (the `#pragma ivdep` is not needed because we don't have dependencies). For what concern the optimization flags, after a few trials with different ones we can conclude that the most performant combination of flags is `-O2 -funroll-loops`. If we want to take the code all together in one file and make the flags affect only the implicit parallelism part we can add above the function `#pragma GCC optimize ("O2", "unroll-loops")`.
 
-***Nota*** The same optimizations could be applied to the symmetric check nested loops
+***Nota*** The same optimizations could be applied to the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/31003fb43f223152bd73e72a461ad5a9d2e3acca/code.c#L77) nested loops
 
 ## Explicit Parallelism Implementation
 The first step is to include the `<omp.h>` library. The openMP method will execute with a certain number of threads the parallel regions and use even more optimizations that we will add, for example: in our case, with the nested loops, we can add a `#pragma omp for collapse(2)` that will compress the two loops in a single amount of iterations to divide among the threads. Another clause that we can add is the `schedule(auto)` that will tell the compiler that at runtime it must choose the best scheduling strategy based on the system characteristics.
