@@ -77,43 +77,9 @@ gcc -o result homework.c -fopenmp
 
 To run our compiled code we have two possibilities: 
 - the first is to use the interactive session that we have started and execute many times with different number of threads and matrix sizes. This is done with the `export OMP_NUM_THREADS=2; ./result` command
-- the second is to create a [.pbs-script](script.pbs) in which we tells the compiler the number of executions that we want and with which parameters (number of threads and size of the matrix). We can do that by creating a new file with the .pbs extension and write the following code:
-```
-#!/bin/bash
-# name the output file 
-#PBS -N 16_results
-# choose the resources to execute the job
-#PBS -l select=1:ncpus=60:ompthreads=60:mem=1mb
-# specify the maximum execution time
-#PBS -l walltime=0:10:00
-# tells the compiler to take together the error and output files
-#PBS -j oe
-# choose the queue
-#PBS -q short_cpuQ
-
-# Modules for C
-module load gcc91
-gcc() {
-    gcc-9.1.0 "$@"
-}
-gcc --version
-
-# Select the working directory
-cd /home/sophie.motter/exercises/homework1
-
-# Run code, this will give us the output of 10 execution for each thread (2-4-8-16-20) with the matrix size of 16x16
-for threads in 2 4 8 16 20; do
-  echo "==========================================" >> o_16.log
-  echo "---------------thread $threads ----------" >> o_16.log
-  for i in {1..10}; do
-    export OMP_NUM_THREADS=$threads; echo 16 | ./result >> o_16.log
-    echo "-------------------------------------------" >> o_16.log
-  done
-  echo "==========================================" >> o_16.log
-done
-```
-This script can be executed for each matrix size we want by changing this parameter in the echo command inside the inner for loop. To submit this job we must write the following command:
-`qsub ./script.pbs` and then in our folder we will find the file in which there are written the wall-clock time requested for each number of thread.
+- the second is to create a [.pbs-script](script.pbs) in which we tell the compiler the number of executions that we want and with which parameters (number of threads and size of the matrix).
+  To submit this job we must write the following command:
+`qsub ./script.pbs` and then in our folder we will find the file in which there are written the wall-clock time requested for each number of thread specified.
 
 ## Performance Analisys
 After we recorded a sufficient number of executions we can make the averages for each method and compare the results by calculating the speedup, that is how much the code is faster with respect to the serial one, and efficiency, that measure how efficiently the resources (threads) are utilized.
