@@ -14,7 +14,7 @@ struct timeval start_tv, end_tv;
 struct timespec start_ts, end_ts;
 long seconds_tv=0;
 long microseconds_tv=0;
-double elapsed_gettimeofday =0;
+double elapsed_gettimeofday=0;
 #ifdef _OPENMP
   double wt1,wt2;
 #endif
@@ -29,11 +29,11 @@ int checkPower(int num){
 
 void print(float** mat){
   for (int i=0; i<n; i++){
-	for (int j=0; j<n; j++){
-		printf("%0.4f	", mat[i][j]);
+		for (int j=0; j<n; j++){
+			printf("%0.8f	", mat[i][j]);
+		}
+		printf("\n");
 	}
-	printf("\n");
-  }
 }
 
 int check_correctness(float** T1, float** T2){
@@ -44,11 +44,13 @@ int check_correctness(float** T1, float** T2){
     for (int j=0; j<n; j++){
       if (T1[i][j]!=T2[i][j]){
         check=1;
+        break;
       }
     }
   }
   //return 0 if it is correct, 1 otherwise
   return check;
+
 }
 
 int checkSym(float** m){
@@ -196,7 +198,7 @@ int main(int argc, char *argv[]) {
 	
  //check if the allocation failed
   if (matrix == NULL || T_serial==NULL || T_implicit==NULL || T_explicit==NULL){
-     printf("memory allocation failed");
+     printf("memory allocation failed\n");
      return 1;
   }
  
