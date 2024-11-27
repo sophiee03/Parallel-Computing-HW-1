@@ -20,6 +20,7 @@ We are working on the university cluster that has these characteristics:
 - operating system: Linux CentOS 7
 - cluster management software: PBS Professional
 - compiler: GCC 9.1.0.
+- RAM: 65 TB
 - nodes are interconnected with 10Gb/s network and some have Infiniband connectivity, others have Omni-Path connectivity
 
 ## Set up the Project
