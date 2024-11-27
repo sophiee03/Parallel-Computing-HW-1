@@ -1,15 +1,10 @@
-# pbs script for the 16x16 matrix with different number of threads 
-# (to change dimension of the matrix update the number in the echo command)
+#PBS script for executing 10 times the same code with the same parameters (matrix size and number of threads)
 #!/bin/bash
-# name the output file
-#PBS -N results
-# select the characteristics of the environment in which our job will be executed
+#PBS -N hw
 #PBS -l select=1:ncpus=60:ompthreads=60:mem=1mb
-# specify the maximum execution time
 #PBS -l walltime=0:10:00
-# tells the compiler to take together the error and output files
+#PBS -J 0-9
 #PBS -j oe
-# choose the queue
 #PBS -q short_cpuQ
 
 # Modules for C
@@ -19,17 +14,11 @@ gcc() {
 }
 gcc --version
 
-# select the working directory
+# Select the working directory
 cd /home/sophie.motter/exercises/homework1
 
-# run code 10 times for each number of threads (2-4-8-16-20) 
-for threads in 2 4 8 16 20; do
-  echo "==========================================" >> o.log
-  echo "---------------thread $threads ----------" >> o.log
-  for i in {1..10}; do
-  # (to change dimension of the matrix update the number in the echo command)
-    export OMP_NUM_THREADS=$threads; echo 16 | ./result >> o.log
-    echo "-------------------------------------------" >> o.log
-  done
-  echo "==========================================" >> o.log
-done
+#compile
+gcc -o results homework_1.c -fopenmp
+
+# Run code with 4 threads and a matrix of 4096x4096
+OMP_NUM_THREADS=4; ./results 4096
