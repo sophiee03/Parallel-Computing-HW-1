@@ -35,9 +35,9 @@ qsub -I -q name_queue -l select=1:ncpus=60:ompthreads=60:mem=1mb
 After we start an interactive session we must enter the folder in which we want to work and create the file for our project, could be done with this command: `touch homework.c`
 And then we can start writing our sequential code that must contain:
 - control on the [size of the matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L22)
-- control on the [matrix allocation](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L197)
+- control on the [matrix allocation](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L200)
 - control of [symmetry](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/04e2b838caaa45dd578e82cc1c8653a569859f2b/code.c#L56) (if true the transposition is not needed)
-- function to [transpose the matrix]()
+- function to [transpose the matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L126)
 - function to control if the implicit/explicit transposition is [executed correctly](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/04e2b838caaa45dd578e82cc1c8653a569859f2b/code.c#L39)
 
 ***N.B.*** The symmetric check function would be faster if we add a break command after the first non-symmetric value is found, but for our purpose we will continue without this command that avoid the parallelization (for more explanations view the report)
@@ -66,20 +66,20 @@ printf("    wall-clock time for the symmetric check: %.8f milliseconds\n", elaps
 ***N.B.*** In this report all the timings are taken in milliseconds 
 
 ## Implicit Parallelism Implementation
-The first optimization that we can try to execute is the implicit parallelism one: it consists in adding some optimization flags in the compilation and the most suitable pragmas above the code that we want to optimize. For example, in our case, we have two nested loops to create the [transposed-matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L141), these pragmas are the most suitable one for our code: 
+The first optimization that we can try to execute is the implicit parallelism one: it consists in adding some optimization flags in the compilation and the most suitable pragmas above the code that we want to optimize. For example, in our case, we have two nested loops to create the [transposed-matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L143), these pragmas are the most suitable one for our code: 
 - the `#pragma simd` directive tells the compiler to force the vectorization
 - the `#pragma unroll(n)` directive will unroll the loops on a certain degree (n).
 
 For what concern the optimization flags, after a few trials with different ones we can conclude that the most performant combination of flags for our code is `-O2 -funroll-loops`. We want to take the code all together in one file and make the flags affect only the implicit parallelism part so we must add above the function that we want to improve: `#pragma GCC optimize ("O2", "unroll-loops")`.
 
-***N.B.*** The same optimizations could be applied to the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L77) nested loops
+***N.B.*** The same optimizations could be applied to the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L79) nested loops
 
 ## Explicit Parallelism Implementation
-The last method that we have to implement is the explicit parallelism one. First we have to include the `<omp.h>` library. The openMP method for the [matrix-transposition](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L160) will execute with a certain number of threads the parallel regions (the ones contained in `#pragma omp parallel{...}`) and use even more optimizations added by clauses, for example: in our case, we can insert a `#pragma omp for collapse(2)` directive above the for loops to compress them in a single amount of iterations divided among the threads. Another clause that we can attach is the `schedule(auto)` clause that will tell the compiler that at runtime it must choose the best scheduling strategy based on the system characteristics.
+The last method that we have to implement is the explicit parallelism one. First we have to include the `<omp.h>` library. The openMP method for the [matrix-transposition](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L162) will execute with a certain number of threads the parallel regions (the ones contained in `#pragma omp parallel{...}`) and use even more optimizations added by clauses, for example: in our case, we can insert a `#pragma omp for collapse(2)` directive above the for loops to compress them in a single amount of iterations divided among the threads. Another clause that we can attach is the `schedule(auto)` clause that will tell the compiler that at runtime it must choose the best scheduling strategy based on the system characteristics.
 
 ***N.B.*** For the OpenMP timings we have another tool to record the time taken: we store the start and end times in two variables with the `omp_get_wtime()` function included in the `omp.h` library and then compute the difference to find the wall-clock time.
 
-***N.B.*** Also in this case, the same optimizations could be applied for the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L102)
+***N.B.*** Also in this case, the same optimizations could be applied for the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L104)
 
 ## Compilation and Execution
 Once we have our code with the three different approaches we can compile and execute it to record the timings and observe the improvements. 
