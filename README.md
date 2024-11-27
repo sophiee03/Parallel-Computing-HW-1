@@ -37,7 +37,7 @@ And then we can start writing our sequential code that must contain:
 - control on the [size of the matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L22)
 - control on the [matrix allocation](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L198)
 - control of [symmetry](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/04e2b838caaa45dd578e82cc1c8653a569859f2b/code.c#L56) (if true the transposition is not needed)
-- function to [transpose the matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L126)
+- function to [transpose the matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L124)
 - function to control if the implicit/explicit transposition is [executed correctly](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/04e2b838caaa45dd578e82cc1c8653a569859f2b/code.c#L39)
 
 ***N.B.*** The symmetric check function would be faster if we add a break command after the first non-symmetric value is found, but for our purpose we will continue without this command that avoid the parallelization (for more explanations view the report)
