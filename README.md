@@ -66,7 +66,7 @@ printf("    wall-clock time for the symmetric check: %.8f milliseconds\n", elaps
 ***N.B.*** In this report all the timings are taken in milliseconds 
 
 ## Implicit Parallelism Implementation
-The first optimization that we can try to execute is the implicit parallelism one: it consists in adding some optimization flags in the compilation and the most suitable pragmas above the code that we want to optimize. For example, in our case, we have two nested loops to create the [transposed-matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L143), these pragmas are the most suitable one for our code: 
+The first optimization that we can try to execute is the implicit parallelism one: it consists in adding some optimization flags in the compilation and the most suitable pragmas above the code that we want to optimize. For example, in our case, we have two nested loops to create the [transposed-matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L141), these pragmas are the most suitable one for our code: 
 - the `#pragma simd` directive tells the compiler to force the vectorization
 - the `#pragma unroll(n)` directive will unroll the loops on a certain degree (n).
 
@@ -75,7 +75,7 @@ For what concern the optimization flags, after a few trials with different ones 
 ***N.B.*** The same optimizations could be applied to the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L79) nested loops
 
 ## Explicit Parallelism Implementation
-The last method that we have to implement is the explicit parallelism one. First we have to include the `<omp.h>` library. The openMP method for the [matrix-transposition](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L162) will execute with a certain number of threads the parallel regions (the ones contained in `#pragma omp parallel{...}`) and use even more optimizations added by clauses, for example: in our case, we can insert a `#pragma omp for collapse(2)` directive above the for loops to compress them in a single amount of iterations divided among the threads. Another clause that we can attach is the `schedule(auto)` clause that will tell the compiler that at runtime it must choose the best scheduling strategy based on the system characteristics.
+The last method that we have to implement is the explicit parallelism one. First we have to include the `<omp.h>` library. The openMP method for the [matrix-transposition](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L160) will execute with a certain number of threads the parallel regions (the ones contained in `#pragma omp parallel{...}`) and use even more optimizations added by clauses, for example: in our case, we can insert a `#pragma omp for collapse(2)` directive above the for loops to compress them in a single amount of iterations divided among the threads. Another clause that we can attach is the `schedule(auto)` clause that will tell the compiler that at runtime it must choose the best scheduling strategy based on the system characteristics.
 
 ***N.B.*** For the OpenMP timings we have another tool to record the time taken: we store the start and end times in two variables with the `omp_get_wtime()` function included in the `omp.h` library and then compute the difference to find the wall-clock time.
 
