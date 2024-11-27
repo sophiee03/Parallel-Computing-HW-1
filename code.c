@@ -28,12 +28,12 @@ int checkPower(int num){
 }
 
 void print(float** mat){
-for (int i=0; i<n; i++){
-  for (int j=0; j<n; j++){
-    printf("%0.4f	", mat[i][j]);
-  }
-  printf("\n");
-}
+  for (int i=0; i<n; i++){
+		for (int j=0; j<n; j++){
+			printf("%0.4f	", mat[i][j]);
+		}
+		printf("\n");
+	}
 }
 
 int check_correctness(float** T1, float** T2){
@@ -49,6 +49,7 @@ int check_correctness(float** T1, float** T2){
   }
   //return 0 if it is correct, 1 otherwise
   return check;
+
 }
 
 int checkSym(float** m){
@@ -72,7 +73,6 @@ int checkSym(float** m){
   printf("    wall-clock time for the symmetric check: %.8f milliseconds\n", elapsed_gettimeofday*1000);
   return check;
 }
-
 //add optimization flags
 #pragma GCC optimize ("O2", "unroll-loops")
 int checkSymIMP(float** m){
@@ -176,9 +176,10 @@ void matTransposeOMP(float** m, float** t){
 
 int main(int argc, char *argv[]) {
   //check if the dimension of the matrix is valid
-  while(checkPower(n)!=1){
-    printf("Enter the dimension of the matrix (must be a power of 2)\n");
-    scanf("%d", &n);
+  n=atoi(argv[1]);
+  if (!checkPower(n)){
+    printf("size of the matrix non valid\n");
+    return 1;
   }
   
   //allocate the matrices
@@ -193,17 +194,17 @@ int main(int argc, char *argv[]) {
     T_explicit[i]=(float*) malloc(n*sizeof(float));
   }
 	
+ //check if the allocation failed
+  if (matrix == NULL || T_serial==NULL || T_implicit==NULL || T_explicit==NULL){
+     printf("memory allocation failed");
+     return 1;
+  }
+ 
   //populate the initial matrix with random floating-point values
   for (int i=0; i<n; i++){
     for (int j=0; j<n; j++){
       matrix[i][j]=MIN + (float)rand() / (float)(RAND_MAX / (MAX - MIN));;
     }
-  }
-  
-  //check if the allocation failed
-  if (matrix == NULL){
-     printf("memory allocation failed");
-     return 1;
   }
   
   printf("\nSEQUENTIAL EXECUTION _________________________________________________\n");
@@ -253,5 +254,6 @@ int main(int argc, char *argv[]) {
   free(T_serial);
   free(T_implicit);
   free(T_explicit);
+  
  return 0;
  }
