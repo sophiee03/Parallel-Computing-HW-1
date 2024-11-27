@@ -82,7 +82,7 @@ To run our compiled code we have two possibilities:
 - the first is to use the interactive session that we have started and execute many times with different number of threads and matrix sizes. This is done with the `export OMP_NUM_THREADS=2; ./result` command
 - the second is to create a [.pbs script](script.pbs) in which we tell the compiler the number of executions that we want and with which parameters (number of threads and size of the matrix).
   To submit this job we must write the following command:
-`qsub ./script.pbs` and then in our folder we will find the file in which there are written the wall-clock time requested for each number of thread specified.
+`qsub ./script.pbs` and then in our folder we will find the files in which there are written the wall-clock time requested for each execution.
 
 ***N.B.*** (for the windows users:) if you are executing and the system gives you an error like `command not found` or `syntax error` caused by `$'\r'` it means that the file could contain newline characters in a windows format that are not correctly interpreted on unix/linux systems. To solve this problem remove the characters `\r` with instruments like `dos2unix` or command `sed` and make sure the necessary modules are loaded.
 
