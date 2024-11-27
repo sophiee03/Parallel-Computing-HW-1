@@ -29,11 +29,11 @@ int checkPower(int num){
 
 void print(float** mat){
   for (int i=0; i<n; i++){
-		for (int j=0; j<n; j++){
-			printf("%0.4f	", mat[i][j]);
-		}
-		printf("\n");
+	for (int j=0; j<n; j++){
+		printf("%0.4f	", mat[i][j]);
 	}
+	printf("\n");
+  }
 }
 
 int check_correctness(float** T1, float** T2){
@@ -49,7 +49,6 @@ int check_correctness(float** T1, float** T2){
   }
   //return 0 if it is correct, 1 otherwise
   return check;
-
 }
 
 int checkSym(float** m){
@@ -73,6 +72,7 @@ int checkSym(float** m){
   printf("    wall-clock time for the symmetric check: %.8f milliseconds\n", elapsed_gettimeofday*1000);
   return check;
 }
+
 //add optimization flags
 #pragma GCC optimize ("O2", "unroll-loops")
 int checkSymIMP(float** m){
@@ -215,7 +215,6 @@ int main(int argc, char *argv[]) {
     //transpose
     matTranspose(matrix, T_serial);
   }
-  
   
   printf("\nIMPLICIT PARALLELISM EXECUTION ________________________________________\n");
   if (checkSymIMP(matrix)==1){
