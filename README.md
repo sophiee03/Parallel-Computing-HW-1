@@ -23,7 +23,7 @@ We are working on the university cluster that has these characteristics:
 - nodes are interconnected with 10Gb/s network and some have Infiniband connectivity, others have Omni-Path connectivity
 
 ## Set up the Project
-The first thing to do is accessing the cluster (if necessary) with the ssh command. Then we have to start an interactive session with the following line:
+The first thing to do is accessing the cluster (if necessary) with the `ssh` command. Then we have to start an interactive session with the following line:
 ```
 qsub -I -q name_queue 
 ```
