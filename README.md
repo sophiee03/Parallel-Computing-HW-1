@@ -40,44 +40,36 @@ And then we can start writing our sequential code that must contain:
 - function to [transpose the matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L124)
 - function to control if the implicit/explicit transposition is [executed correctly](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/04e2b838caaa45dd578e82cc1c8653a569859f2b/code.c#L39)
 
-***N.B.*** The symmetric check function would be faster if we add a break command after the first non-symmetric value is found, but for our purpose we will continue without this command that avoid the parallelization (for more explanations view the report)
-
 After we implemented these functions we will have the base code with which we can then compare the parallel one.
 
 ## Record The Wall-Clock Time
 To obtain the time taken for the execution we have to use the `gettimeofday()` function of the `sys/time.h` library, implemented in this way:
 ```
-//variables to record the time
 struct timeval start_tv, end_tv;
 struct timespec start_ts, end_ts;
-//starting timer
 gettimeofday(&start_tv, NULL);
   //code to measure
-//stop the timer
 gettimeofday(&end_tv, NULL);
-//calculate the difference between end-start of seconds and microseconds
 long seconds_tv = end_tv.tv_sec - start_tv.tv_sec;
 long microseconds_tv = end_tv.tv_usec - start_tv.tv_usec;
-//sum up the differences to find the total amount of time passed
 double elapsed_gettimeofday = seconds_tv + microseconds_tv*1e-6;
-//display the resulting time in milliseconds
 printf("    wall-clock time for the symmetric check: %.8f milliseconds\n", elapsed_gettimeofday*1000);
 ```
+***N.B.*** For the OpenMP timings we have another tool to record the time taken: we store the start and end times in two variables with the `omp_get_wtime()` function included in the `omp.h` library and then compute the difference to find the wall-clock time.
+
 ***N.B.*** In this report all the timings are taken in milliseconds 
 
 ## Implicit Parallelism Implementation
-The first optimization that we can try to execute is the implicit parallelism one: it consists in adding some optimization flags in the compilation and the most suitable pragmas above the code that we want to optimize. For example, in our case, we have two nested loops to create the [transposed-matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L141), these pragmas are the most suitable one for our code: 
+The first parallelization approach is the implicit parallelism one: it consists in adding some optimization flags in the compilation and the most suitable pragmas above the code that we want to optimize. In our case, we have two nested loops to create the [transposed-matrix](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L141), these pragmas are the most suitable one for our code: 
 - the `#pragma simd` directive tells the compiler to force the vectorization
 - the `#pragma unroll(n)` directive will unroll the loops on a certain degree (n).
 
-For what concern the optimization flags, after a few trials with different ones we can conclude that the most performant combination of flags for our code is `-O2 -funroll-loops`. We want to take the code all together in one file and make the flags affect only the implicit parallelism part so we must add above the function that we want to improve: `#pragma GCC optimize ("O2", "unroll-loops")`.
+For what concern the optimization flags, after a few trials with different ones we can conclude that the most performant combination of flags for our code is `-O2 -funroll-loops`. If we want to take the code all together in one file and make the flags affect only the implicit parallelism part, we must add above the function: `#pragma GCC optimize ("O2", "unroll-loops")`.
 
-***N.B.*** The same optimizations could be applied to the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L77) nested loops
+***N.B.*** The same optimizations could be applied to the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L77)
 
 ## Explicit Parallelism Implementation
-The last method that we have to implement is the explicit parallelism one. First we have to include the `<omp.h>` library. The openMP method for the [matrix-transposition](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L160) will execute with a certain number of threads the parallel regions (the ones contained in `#pragma omp parallel{...}`) and use even more optimizations added by clauses, for example: in our case, we can insert a `#pragma omp for collapse(2)` directive above the for loops to compress them in a single amount of iterations divided among the threads. Another clause that we can attach is the `schedule(auto)` clause that will tell the compiler that at runtime it must choose the best scheduling strategy based on the system characteristics.
-
-***N.B.*** For the OpenMP timings we have another tool to record the time taken: we store the start and end times in two variables with the `omp_get_wtime()` function included in the `omp.h` library and then compute the difference to find the wall-clock time.
+The other method that we have to observe is the explicit parallelism one. First we have to include the `<omp.h>` library. The openMP method for the [matrix-transposition](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L160) will execute with a certain number of threads the parallel regions (the ones contained in `#pragma omp parallel{...}`) and use even more optimizations added by clauses, for example, in our case we can insert a `for collapse(2)` directive above the for loops to compress them in a single amount of iterations divided among the threads. Another clause that we can attach is the `schedule(auto)` clause that will tell the compiler that at runtime it must choose the best scheduling strategy based on the system characteristics.
 
 ***N.B.*** Also in this case, the same optimizations could be applied for the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L102)
 
@@ -91,7 +83,7 @@ gcc -o result homework.c -fopenmp
 
 To run our compiled code we have two possibilities: 
 - the first method is to use the interactive session that we have started and execute many times with different number of threads and matrix sizes. This is done with the `export OMP_NUM_THREADS=2; ./result 64` command
-- the second and faster method is to create a [.pbs script](script.pbs) in which we tell the compiler the number of executions that we want. This is done by using Job Arrays: the code in the PBS script will be executed a certain number of times with the same parameters that we have included in the code (matrix size and number of threads); if we want to change parameters and test with different ones we need only to change these values. To submit this job we must write the following command: `qsub ./script.pbs` and then in our folder we will find the output files in which there are written the wall-clock time requested for each execution.
+- the second and faster method is to create a [.pbs script](script.pbs) in which we tell the compiler the number N of executions that we want. This is done by using Job Arrays: the code in the PBS script will be executed N times in the same environment with the parameters that we have included in the code (matrix size and number of threads). If we want to change parameters and test with different ones we need only to change these values. To submit this job we must write the following command: `qsub ./script.pbs` and then in our folder we will find the N output files generated.
 
 ## Performance Analisys
 After we recorded a sufficient number of executions we can make the averages for each method and compare the results by calculating the speedup, that is how much the code is faster with respect to the serial one, and efficiency, that measure how efficiently the resources (threads) are utilized.
@@ -102,7 +94,7 @@ To calculate the speedup:
 To calculate the efficiency:
 ```Efficiency = Speedup / N_Threads```
 
-You can observe the trend of these metrics in the following graphs:
+We can observe the trend of these metrics in the following graphs:
 <div style="display: flex; justify-content: space-around;">
   <img src="images/speedupmat.png" alt="Image 1" width="500" />
   <img src="images/speedupsym.png" alt="Image 2" width="500" />
