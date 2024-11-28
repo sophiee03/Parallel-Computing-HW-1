@@ -5,22 +5,12 @@ In this repository we will analyze the behavior of a code execution with differe
 The task that we want to implement is a code for a matrix transposition with different matrix sizes and different parallelization methods to compare the wall-clock time of each approach and find the best solution to optimize the performance and the resource usage.  
 
 # Index
-1. [System Description](#system-description)
-2. [Set up the Project](#set-up-the-project)
-3. [Record the Wall-Clock Time](#record-the-wall-clock-time)
-4. [Implicit Parallelism Implementation](#implicit-parallelism-implementation)
-5. [Explicit Parallelism Implementation](#explicit-parallelism-implementation)
-6. [Compilation and Execution](#compilation-and-execution)
-7. [Performance Analisys](#performance-analisys)
-
-## System Description
-We are working on the university cluster that has these characteristics:
-- composed of 142 CPU calculation nodes running at 2.3GHz for a total of 7674 cores and 10 GPU calculation nodes for a total of 48.128 CUDA cores
-- operating system: Linux CentOS 7
-- cluster management software: PBS Professional
-- compiler: GCC 9.1.0.
-- RAM: 65 TB
-- nodes are interconnected with 10Gb/s network and some have Infiniband connectivity, others have Omni-Path connectivity
+1. [Set up the Project](#set-up-the-project)
+2. [Record the Wall-Clock Time](#record-the-wall-clock-time)
+3. [Implicit Parallelism Implementation](#implicit-parallelism-implementation)
+4. [Explicit Parallelism Implementation](#explicit-parallelism-implementation)
+5. [Compilation and Execution](#compilation-and-execution)
+6. [Performance Analisys](#performance-analisys)
 
 ## Set up the Project
 The first thing to do is accessing the cluster (if necessary) with the `ssh` command. Then we have to start an interactive session with the following line:
