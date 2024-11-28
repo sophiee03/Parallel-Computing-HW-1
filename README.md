@@ -61,7 +61,7 @@ To run our compiled code we have two possibilities:
 - the first method is to use the interactive session that we have started and execute many times with different number of threads and matrix sizes. This is done with the `export OMP_NUM_THREADS=2; ./result 64` command, but it is time expensive, especially if we need a big number of executions.
 - the second and faster method is to create a [.pbs script](script.pbs) in which we tell the compiler the number N of executions that we want. This is done by using Job Arrays: the code in the PBS script will be executed N times in the same environment with the parameters that we have included in the code (matrix size and number of threads). If we want to change parameters and test with different ones we need only to change these values. To submit this job we must write the following command: `qsub ./script.pbs` and then in our folder we will find the N output files generated.
 
-***N.B.*** if you use my pbs script remember to change the folder path in which the codes are saved and the PBS directive based on your system
+***N.B.*** if you use my pbs script remember to change the folder path in which the codes are saved and the PBS directives based on your system
 
 ***N.B.*** [for windows users] if you encounter errors in the submission of the psb script, it could be a problem caused by the operating system (because you are writing in a 'windows format'). To avoid this problem use this command before submitting the job: `dos2unix script.pbs`
 
