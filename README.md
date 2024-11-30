@@ -54,7 +54,7 @@ The openMP method for the [matrix-transposition](https://github.com/sophiee03/In
 Once we have our code with the three different approaches we can compile and execute it to record the timings and observe the improvements. 
 To compile the code (we have to be in the folder in which the code is saved):
 ```
-gcc -o result homework.c -fopenmp
+gcc -o result code.c -fopenmp
 ```
 ***N.B.*** it is necessary to include in the compilation the `-fopenmp` flag to tell the compiler to use the OpenMP functionality (otherwise the explicit paralellism code will not be executed in paralell with threads)
 
