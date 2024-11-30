@@ -63,6 +63,7 @@ To run our compiled code we have two possibilities:
 - the second and faster method is to create a [.pbs script](script.pbs) in which we tell the compiler the number N of executions that we want. This is done by using Job Arrays: the code in the PBS script will be executed N times in the same environment with the parameters that we have included in the code (matrix size and number of threads). If we want to change parameters and test with different ones we need only to change these values. To submit this job we must write the following command: `qsub ./script.pbs` and then in our folder we will find the N output files generated. To submit more times the job it is necessary to compile only one time the code (and have only one executable file), to do that it is possible to compile the code one time and remove from the pbs script the compilation line before submitting it.
 
 The result that we will find in each file is of the following type:
+
 <img src="images/example_execution.png" alt="Image 1" width="500" />
 
 ***N.B.*** if you use my pbs script remember to change the folder path in which the codes is saved and the PBS directives based on your system
