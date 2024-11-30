@@ -118,7 +118,7 @@ int checkSymOMP(float** m){
   //stop timer
   #ifdef _OPENMP
     wt2=omp_get_wtime();
-    printf("    wall-clock time for the symmetric check = %.8f milliseconds\n", (wt2-wt1)*1000 );
+    printf("    wall-clock time for the symmetric check : %.8f milliseconds\n", (wt2-wt1)*1000 );
   #endif
   return check;
 }
