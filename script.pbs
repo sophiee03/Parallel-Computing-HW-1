@@ -1,4 +1,3 @@
-#PBS script for executing 10 times the same code with the same parameters (matrix size and number of threads)
 #!/bin/bash
 #PBS -N hw
 #PBS -l select=1:ncpus=60:ompthreads=60:mem=1mb
@@ -15,7 +14,7 @@ gcc() {
 }
 gcc --version
 
-# Select the working directory
+# Select the working directory [REMEMBER TO CHANGE THIS PATH]
 cd /home/sophie.motter/exercises/homework1
 
 #compile
