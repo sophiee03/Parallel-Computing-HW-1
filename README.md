@@ -45,6 +45,7 @@ It consists in adding some optimization flags in the compilation and the most su
 For what concern the optimization flags, after a few trials with different ones we can conclude that the most performant combination of flags for our code is `-O2 -funroll-loops`.
 
 EXPLICIT PARALLELISM:
+
 The openMP method for the [matrix-transposition](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L160) and for the [symmetric-check](https://github.com/sophiee03/IntroPARCO-2024-H1/blob/f0f57507d67a5b9177c49b7338466a276ca22a54/code.c#L102) will execute with a certain number of threads the parallel regions and use even more optimizations added by clauses:
 - `for collapse(2)` directive to compress loops in a single amount of iterations divided among the threads. 
 - `schedule(auto)` clause tell the compiler that at runtime it must choose the best scheduling strategy based on the system characteristics.
