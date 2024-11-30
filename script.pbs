@@ -19,7 +19,7 @@ gcc --version
 cd /home/sophie.motter/exercises/homework1
 
 #compile
-gcc -o results homework_1.c -fopenmp
+gcc -o results code.c -fopenmp
 
 # Run code with 4 threads and a matrix of 4096x4096 [CHANGE THESE PARAMETERS TO EXECUTE WITH DIFFERENT VALUES]
 OMP_NUM_THREADS=4; ./results 4096
