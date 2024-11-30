@@ -1,4 +1,4 @@
-# H1 Serial and Parallel Execution Comparison
+# Introduction to Parallel Computing, Homework 1
 Homework for the first deliverable of the course "Introduction to parallel computing" in University of Trento.
 
 In this repository we will analyze the behavior of a code execution with different parallelization techniques: serial execution, implicit parallelism execution and explicit parallelism execution.
